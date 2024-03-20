@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://bmegjugrcjj5q"]
+
+[ext_resource type="Texture2D" uid="uid://cvhhg4ii2qfl2" path="res://graphics/Backgrounds/Tilesets/TilesetHouse.png" id="1_41txp"]
+[ext_resource type="Texture2D" uid="uid://dex6m6ppojfa5" path="res://graphics/circle.png" id="2_ayxn2"]
+
+[node name="Light" type="Sprite2D"]
+position = Vector2(0, -6)
+texture = ExtResource("1_41txp")
+region_enabled = true
+region_rect = Rect2(97.1371, 48.5671, 14.0536, 13.2428)
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+color = Color(0.796078, 0.458824, 0.152941, 1)
+energy = 2.0
+shadow_enabled = true
+texture = ExtResource("2_ayxn2")
+texture_scale = 0.4

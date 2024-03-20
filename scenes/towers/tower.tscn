@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://bmptufhcn41v7"]
+
+[ext_resource type="Script" path="res://scenes/towers/tower.cs" id="1_384tm"]
+[ext_resource type="Texture2D" uid="uid://b6d4r0xm4pv52" path="res://graphics/Actor/Characters/DarkNinja/SeparateAnim/Idle.png" id="1_xrgx3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l80ds"]
+size = Vector2(12, 4)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1nnxw"]
+radius = 132.095
+
+[node name="Tower" type="Area2D"]
+script = ExtResource("1_384tm")
+
+[node name="Sprite" type="Node2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="Sprite"]
+position = Vector2(0, -8)
+texture = ExtResource("1_xrgx3")
+region_enabled = true
+region_rect = Rect2(0.593414, 0.783142, 15.54, 16.0805)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -2)
+shape = SubResource("RectangleShape2D_l80ds")
+
+[node name="AttackRange" type="Area2D" parent="."]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackRange"]
+position = Vector2(0, -4)
+shape = SubResource("CircleShape2D_1nnxw")
+
+[node name="Marker2D" type="Marker2D" parent="."]
+position = Vector2(-6, -2)
+
+[node name="AttackDelay" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="AttackDelay" to="." method="OnAttackDelayTimeout"]
