@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://bap6hgbt0khsj"]
+[gd_scene load_steps=32 format=3 uid="uid://bap6hgbt0khsj"]
 
 [ext_resource type="Script" path="res://scenes/level.cs" id="1_el0fd"]
 [ext_resource type="Texture2D" uid="uid://cvhhg4ii2qfl2" path="res://graphics/Backgrounds/Tilesets/TilesetHouse.png" id="1_vi1gn"]
@@ -1123,6 +1123,12 @@ shader_parameter/height = 8.0
 shader_parameter/frequency = 15.0
 shader_parameter/speed = 8.0
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g4whj"]
+shader = ExtResource("7_gpson")
+shader_parameter/height = 6.0
+shader_parameter/frequency = 20.0
+shader_parameter/speed = 10.0
+
 [sub_resource type="Environment" id="Environment_tnphn"]
 background_mode = 3
 tonemap_mode = 2
@@ -1427,6 +1433,73 @@ grow_vertical = 2
 theme_override_fonts/font = ExtResource("8_mob35")
 theme_override_font_sizes/font_size = 30
 text = "Press    R    to    play    again"
+
+[node name="LevelFinished" type="CanvasLayer" parent="Interface"]
+
+[node name="BlueBackground" type="ColorRect" parent="Interface/LevelFinished"]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0156863, 0.0196078, 0.141176, 1)
+
+[node name="LevelFinishedLabel1" type="Label" parent="Interface/LevelFinished"]
+unique_name_in_owner = true
+modulate = Color(0, 0.576471, 0.435294, 0)
+material = SubResource("ShaderMaterial_g4whj")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -449.0
+offset_top = -130.0
+offset_right = 508.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("8_mob35")
+theme_override_font_sizes/font_size = 80
+text = "CONGRATULATIONS!"
+
+[node name="LevelFinishedLabel2" type="Label" parent="Interface/LevelFinished"]
+unique_name_in_owner = true
+modulate = Color(0.196078, 0.494118, 0.396078, 0)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -307.0
+offset_top = 17.0
+offset_right = 318.0
+offset_bottom = 127.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("8_mob35")
+theme_override_font_sizes/font_size = 50
+text = "For   beating    the    level!"
+
+[node name="LevelFinishedLabel3" type="Label" parent="Interface/LevelFinished"]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -260.0
+offset_top = -138.0
+offset_right = 260.0
+offset_bottom = -59.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("8_mob35")
+theme_override_font_sizes/font_size = 40
+text = "Press    enter    to    continue"
 
 [node name="Objects" type="Node2D" parent="."]
 y_sort_enabled = true

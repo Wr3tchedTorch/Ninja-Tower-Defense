@@ -82,7 +82,6 @@ public partial class tower : Area2D
 
         GetNode<Node2D>("../Projectiles").AddChild(newProjectile);
         newProjectile.GlobalPosition = GetNode<Marker2D>("Marker2D").GlobalPosition;
-        GD.Print(IsInstanceValid(currentEnemy));
         newProjectile.Target = currentEnemy;
 
         Tween rotTween = CreateTween();

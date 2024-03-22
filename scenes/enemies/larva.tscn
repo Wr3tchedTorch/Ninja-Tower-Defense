@@ -9,4 +9,5 @@ Damage = 10
 resistence = 4.0
 
 [node name="Sprite2D" parent="." index="0"]
+position = Vector2(0, -7)
 texture = ExtResource("2_rd4us")

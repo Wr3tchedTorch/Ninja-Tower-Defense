@@ -15,13 +15,14 @@ public partial class Mob : PathFollow2D
 
     public override void _Ready()
     {
+        GetNode<level>("/root/Level").EnemiesAlive++;
         Random rng = new Random();
         Speed = (float)rng.NextDouble() * Speed / 2 + Speed;
         GetNode<AnimationPlayer>("AnimationPlayer").Play("walk_front");
     }
 
     public override void _PhysicsProcess(double delta)
-    {
+    {        
         if (GetNode<Sprite2D>("Sprite2D").Modulate == new Color(Colors.White, 0)) QueueFree();
 
         if (Health <= 0) return;
@@ -42,6 +43,7 @@ public partial class Mob : PathFollow2D
     {
         if (Health > 0) return;
 
+        GetNode<level>("/root/Level").EnemiesAlive--;
         GetNode<Area2D>("Area2D").Monitorable = false;
         GetNode<AnimationPlayer>("AnimationPlayer").Play("death");
     }
@@ -52,5 +54,6 @@ public partial class Mob : PathFollow2D
 
         Tween fadeEnemyOut = CreateTween();
         fadeEnemyOut.TweenProperty(GetNode<Sprite2D>("Sprite2D"), "modulate", new Color(Colors.White, 0), .2);
+        GetNode<level>("/root/Level").EnemiesAlive--;
     }
 }
