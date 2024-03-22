@@ -4,10 +4,9 @@
 [ext_resource type="Texture2D" uid="uid://bt46kfuop7g2l" path="res://graphics/Actor/Monsters/Larva/Larva.png" id="2_rd4us"]
 
 [node name="larva" instance=ExtResource("1_3jb6s")]
-Speed = 30.0
+Speed = 50.0
 Damage = 10
-MoneyDrop = 10
-resistence = 2.5
+resistence = 4.0
 
 [node name="Sprite2D" parent="." index="0"]
 texture = ExtResource("2_rd4us")

@@ -1,10 +1,11 @@
-[gd_scene load_steps=29 format=3 uid="uid://bap6hgbt0khsj"]
+[gd_scene load_steps=31 format=3 uid="uid://bap6hgbt0khsj"]
 
 [ext_resource type="Script" path="res://scenes/level.cs" id="1_el0fd"]
 [ext_resource type="Texture2D" uid="uid://cvhhg4ii2qfl2" path="res://graphics/Backgrounds/Tilesets/TilesetHouse.png" id="1_vi1gn"]
 [ext_resource type="Texture2D" uid="uid://c65hhml5d5y6m" path="res://graphics/Backgrounds/Tilesets/TilesetField.png" id="2_cwt58"]
 [ext_resource type="Texture2D" uid="uid://bbuirq0iu65ku" path="res://graphics/Backgrounds/Tilesets/TilesetFloor.png" id="3_hwoh2"]
 [ext_resource type="Texture2D" uid="uid://wpftrfl73hkq" path="res://graphics/Backgrounds/Tilesets/TilesetFloorDetail.png" id="4_yvgmj"]
+[ext_resource type="Shader" path="res://scenes/wave_warning.gdshader" id="7_gpson"]
 [ext_resource type="PackedScene" uid="uid://bmegjugrcjj5q" path="res://scenes/miscellaneous/light.tscn" id="7_qh421"]
 [ext_resource type="FontFile" uid="uid://blyext8kwg7dk" path="res://graphics/HUD/Font/NormalFont.ttf" id="8_mob35"]
 [ext_resource type="Texture2D" uid="uid://dth7o4rbiqfh6" path="res://graphics/HUD/Dialog/DialogueBoxSimple.png" id="8_uhpwv"]
@@ -1116,6 +1117,12 @@ corner_radius_top_right = 50
 corner_radius_bottom_right = 50
 corner_radius_bottom_left = 50
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jelxw"]
+shader = ExtResource("7_gpson")
+shader_parameter/height = 8.0
+shader_parameter/frequency = 15.0
+shader_parameter/speed = 8.0
+
 [sub_resource type="Environment" id="Environment_tnphn"]
 background_mode = 3
 tonemap_mode = 2
@@ -1172,7 +1179,7 @@ autostart = true
 
 [node name="NextWaveDelay" type="Timer" parent="Enemies"]
 unique_name_in_owner = true
-wait_time = 10.0
+wait_time = 5.0
 one_shot = true
 
 [node name="Towers" type="Node2D" parent="."]
@@ -1258,71 +1265,26 @@ theme_override_fonts/font = ExtResource("8_mob35")
 theme_override_font_sizes/font_size = 40
 text = "Wave:1"
 
-[node name="GameOver" type="CanvasLayer" parent="Interface"]
-
-[node name="RedBackground" type="ColorRect" parent="Interface/GameOver"]
+[node name="WaveWarning" type="Label" parent="Interface/GameHUD"]
 unique_name_in_owner = true
-modulate = Color(1, 1, 1, 0)
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.196078, 0, 0, 1)
-
-[node name="GameoverLabel1" type="Label" parent="Interface/GameOver"]
-unique_name_in_owner = true
-modulate = Color(1, 1, 1, 0)
+visible = false
+material = SubResource("ShaderMaterial_jelxw")
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -126.0
-offset_top = -108.0
-offset_right = 126.0
-offset_bottom = -53.0
+offset_left = -30.0
+offset_top = -11.5
+offset_right = 30.0
+offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_outline_size = 10
 theme_override_fonts/font = ExtResource("8_mob35")
-theme_override_font_sizes/font_size = 40
-text = "YOUR SENSEI"
-
-[node name="GameoverLabel2" type="Label" parent="Interface/GameOver"]
-unique_name_in_owner = true
-modulate = Color(1, 1, 1, 0)
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -233.0
-offset_top = -55.0
-offset_right = 292.0
-offset_bottom = 55.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("8_mob35")
-theme_override_font_sizes/font_size = 80
-text = "WAS KILLED..."
-
-[node name="GameoverLabel3" type="Label" parent="Interface/GameOver"]
-unique_name_in_owner = true
-modulate = Color(1, 1, 1, 0)
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -190.0
-offset_top = 73.0
-offset_right = 190.0
-offset_bottom = 133.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("8_mob35")
-theme_override_font_sizes/font_size = 30
-text = "Press    R    to    play    again"
+theme_override_font_sizes/font_size = 120
+text = "Wave: 1"
 
 [node name="Store" type="CanvasLayer" parent="Interface"]
 
@@ -1398,6 +1360,73 @@ texture_pressed = ExtResource("9_dp5he")
 texture_hover = ExtResource("9_dp5he")
 texture_focused = ExtResource("9_dp5he")
 stretch_mode = 4
+
+[node name="GameOver" type="CanvasLayer" parent="Interface"]
+
+[node name="RedBackground" type="ColorRect" parent="Interface/GameOver"]
+unique_name_in_owner = true
+visible = false
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.196078, 0, 0, 1)
+
+[node name="GameoverLabel1" type="Label" parent="Interface/GameOver"]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -126.0
+offset_top = -108.0
+offset_right = 126.0
+offset_bottom = -53.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("8_mob35")
+theme_override_font_sizes/font_size = 40
+text = "YOUR SENSEI"
+
+[node name="GameoverLabel2" type="Label" parent="Interface/GameOver"]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -233.0
+offset_top = -55.0
+offset_right = 292.0
+offset_bottom = 55.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("8_mob35")
+theme_override_font_sizes/font_size = 80
+text = "WAS KILLED..."
+
+[node name="GameoverLabel3" type="Label" parent="Interface/GameOver"]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -190.0
+offset_top = 73.0
+offset_right = 190.0
+offset_bottom = 133.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("8_mob35")
+theme_override_font_sizes/font_size = 30
+text = "Press    R    to    play    again"
 
 [node name="Objects" type="Node2D" parent="."]
 y_sort_enabled = true

@@ -12,9 +12,12 @@ public partial class level : Node2D
     private bool _waveStarted = false;
     private int _currentWaveIndex = 0;
 
-    public override void _Ready() {
+    public override void _Ready()
+    {
         Global.Money = 10;
-        
+
+        GetNode<ColorRect>("%RedBackground").Visible = false;
+
         GetNode<Timer>("%NextWaveDelay").Start();
         GetNode<Label>("%WaveLabel").Text = "Wave: " + (_currentWaveIndex + 1);
         _waveStarted = false;
@@ -31,10 +34,7 @@ public partial class level : Node2D
 
         GetNode<Label>("%MoneyLabel").Text = "Money: " + Global.Money;
 
-        if (Input.IsActionPressed("reset-game"))
-        {
-            GetTree().ReloadCurrentScene();
-        }
+        if (Input.IsActionPressed("reset-game")) GetTree().ReloadCurrentScene();
 
         if (GetNode<ProgressBar>("%HealthBar").Value > 0 || _gameoverScreenFaded) return;
         Gameover();
@@ -44,6 +44,7 @@ public partial class level : Node2D
     {
         Tween tweenGameoverScreen = GetTree().CreateTween();
 
+        GetNode<ColorRect>("%RedBackground").Visible = true;
         tweenGameoverScreen.TweenProperty(GetNode<ColorRect>("%RedBackground"), "modulate", new Color(Colors.White, 1f), 1);
         tweenGameoverScreen.TweenProperty(GetNode<Label>("%GameoverLabel1"), "modulate", new Color(Colors.White, 1), 1);
         tweenGameoverScreen.TweenProperty(GetNode<Label>("%GameoverLabel2"), "modulate", new Color(Colors.Red, 1), 1);
@@ -52,6 +53,30 @@ public partial class level : Node2D
         tweenGameoverScreen.Connect("finished", callable);
 
         _gameoverScreenFaded = true;
+    }
+
+    private void StartNextWave()
+    {
+        Tween waveText = CreateTween();
+
+        GetNode<Label>("%WaveWarning").Text = "Wave: " + (_currentWaveIndex + 1);
+        GetNode<Label>("%WaveWarning").Modulate = new Color(Colors.White, 0);
+        GetNode<Label>("%WaveWarning").Visible = true;
+
+        waveText.TweenProperty(GetNode<Label>("%WaveWarning"), "modulate", new Color(Colors.White, 1), 1.5f);
+        waveText.TweenInterval(1);
+        waveText.TweenProperty(GetNode<Label>("%WaveWarning"), "modulate", new Color(Colors.White, 0), 1);
+        
+        GetNode<Label>("%WaveLabel").Text = "Wave: " + (_currentWaveIndex + 1);
+
+        Callable callable = new Callable(this, "OnWaveTextTweenFinished");
+        waveText.Connect("finished", callable);
+    }
+
+    private void OnWaveTextTweenFinished()
+    {
+        GetNode<Label>("%WaveWarning").Visible = false;
+        _waveStarted = true;
     }
 
     private void OnTweenFinished()
@@ -66,12 +91,13 @@ public partial class level : Node2D
     {
         if (!_waveStarted) return;
 
-        Random rng = new Random();    
+        Random rng = new Random();
         string enemyPath = "";
         foreach (var enemy in Global.enemies)
         {
             int chance = (int)Math.Floor(rng.NextDouble() * 100);
-            if (chance <= (enemy[1].ToInt() + (_currentWaveIndex+1)*3)) {
+            if (chance <= (enemy[1].ToInt() + (_currentWaveIndex + 1) * 3))
+            {
                 enemyPath = enemy[0];
                 break;
             }
@@ -85,14 +111,14 @@ public partial class level : Node2D
         if (enemiesLeft <= _waves[_currentWaveIndex]) return;
         enemiesLeft = 0;
         _waveStarted = false;
-        _currentWaveIndex++;        
+        _currentWaveIndex++;
         GetNode<Timer>("%NextWaveDelay").Start();
     }
 
-    public void OnNextWaveTimerTimeout() {
-        if (_currentWaveIndex != 0) Global.Money += (_currentWaveIndex+1) * 2 + 10;
-        GetNode<Label>("%WaveLabel").Text = "Wave: " + (_currentWaveIndex + 1);
-        _waveStarted = true;
+    public void OnNextWaveTimerTimeout()
+    {
+        if (_currentWaveIndex != 0) Global.Money += (_currentWaveIndex + 1) * 2 + 10;
+        StartNextWave();
     }
 
     public void OnFinishLineAreaEntered(Area2D area)

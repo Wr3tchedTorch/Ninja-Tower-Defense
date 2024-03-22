@@ -61,7 +61,6 @@ public partial class tower : Area2D
             GetGlobalMousePosition().Y > hitBoxPos.Y - hitBoxH / 2 && GetGlobalMousePosition().Y < hitBoxPos.Y + hitBoxH / 2
             )
         {
-            Input.SetDefaultCursorShape(Input.CursorShape.PointingHand);
             GetNode<Sprite2D>("RangeDraw").Visible = true;
             return;
         }        

@@ -4,9 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bdvbpgnhw8xfr" path="res://graphics/Actor/Monsters/Spirit2/SpriteSheet.png" id="2_10x80"]
 
 [node name="Fire Spirit" instance=ExtResource("1_f25m4")]
-Speed = 120.0
-Damage = 5
-MoneyDrop = 3
+Speed = 160.0
 resistence = 0.7
 
 [node name="Sprite2D" parent="." index="0"]
