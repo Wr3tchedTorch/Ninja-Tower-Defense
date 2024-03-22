@@ -1,15 +1,85 @@
-[gd_scene load_steps=5 format=3 uid="uid://bmptufhcn41v7"]
+[gd_scene load_steps=13 format=3 uid="uid://bmptufhcn41v7"]
 
 [ext_resource type="Script" path="res://scenes/towers/tower.cs" id="1_384tm"]
 [ext_resource type="Texture2D" uid="uid://b6d4r0xm4pv52" path="res://graphics/Actor/Characters/DarkNinja/SeparateAnim/Idle.png" id="1_xrgx3"]
+[ext_resource type="Texture2D" uid="uid://dovmact6gmda0" path="res://circle.png" id="3_bodab"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l80ds"]
-size = Vector2(12, 4)
+size = Vector2(16, 15)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1nnxw"]
-radius = 132.095
+radius = 57.8705
+
+[sub_resource type="Gradient" id="Gradient_i2mrd"]
+colors = PackedColorArray(0, 0, 0, 0.87451, 0.333333, 0.333333, 0.333333, 0.882353)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_1yl2a"]
+gradient = SubResource("Gradient_i2mrd")
+
+[sub_resource type="Curve" id="Curve_mppu7"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.263736), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_0wuom"]
+curve = SubResource("Curve_mppu7")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2qu85"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 13.94
+gravity = Vector3(0, -100, 0)
+scale_min = 3.0
+scale_max = 4.0
+scale_curve = SubResource("CurveTexture_0wuom")
+color_ramp = SubResource("GradientTexture1D_1yl2a")
+
+[sub_resource type="Animation" id="Animation_ap105"]
+resource_name = "spawn"
+length = 1.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AttackRange:monitoring")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SmokeBomb:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite/Sprite2D:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 1.1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bjjkm"]
+_data = {
+"spawn": SubResource("Animation_ap105")
+}
 
 [node name="Tower" type="Area2D"]
+collision_mask = 17
 script = ExtResource("1_384tm")
 
 [node name="Sprite" type="Node2D" parent="."]
@@ -20,14 +90,18 @@ texture = ExtResource("1_xrgx3")
 region_enabled = true
 region_rect = Rect2(0.593414, 0.783142, 15.54, 16.0805)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -2)
+[node name="HitBox" type="CollisionShape2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(0, -7.5)
 shape = SubResource("RectangleShape2D_l80ds")
 
 [node name="AttackRange" type="Area2D" parent="."]
+collision_layer = 0
 collision_mask = 2
+monitoring = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackRange"]
+[node name="AttackCircle" type="CollisionShape2D" parent="AttackRange"]
+unique_name_in_owner = true
 position = Vector2(0, -4)
 shape = SubResource("CircleShape2D_1nnxw")
 
@@ -37,4 +111,26 @@ position = Vector2(-6, -2)
 [node name="AttackDelay" type="Timer" parent="."]
 one_shot = true
 
+[node name="SmokeBomb" type="GPUParticles2D" parent="."]
+position = Vector2(0, -3)
+emitting = false
+amount = 200
+process_material = SubResource("ParticleProcessMaterial_2qu85")
+one_shot = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_bjjkm")
+}
+
+[node name="RangeDraw" type="Sprite2D" parent="."]
+modulate = Color(0.419608, 0.505882, 0.745098, 0.313726)
+position = Vector2(0, -1.95874)
+scale = Vector2(3.561, 3.52)
+texture = ExtResource("3_bodab")
+region_enabled = true
+region_rect = Rect2(9, 6, 79, 79)
+
+[connection signal="area_entered" from="." to="." method="OnAreaEntered"]
+[connection signal="area_exited" from="." to="." method="OnAreaExited"]
 [connection signal="timeout" from="AttackDelay" to="." method="OnAttackDelayTimeout"]

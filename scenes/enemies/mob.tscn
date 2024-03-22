@@ -1,10 +1,10 @@
 [gd_scene load_steps=13 format=3 uid="uid://dkm8bsbkwpx0"]
 
-[ext_resource type="Script" path="res://Mob.cs" id="1_umuak"]
+[ext_resource type="Script" path="res://scenes/enemies/Mob.cs" id="1_umuak"]
 [ext_resource type="Texture2D" uid="uid://c1lxel8dp5mtd" path="res://graphics/Actor/Monsters/Lizard/Lizard.png" id="2_2v6la"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_r1njm"]
-size = Vector2(10, 5)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m3wah"]
+size = Vector2(10.5, 10)
 
 [sub_resource type="Gradient" id="Gradient_fb5tf"]
 colors = PackedColorArray(0.901961, 0, 0, 1, 0.992157, 0.290196, 0.188235, 0)
@@ -81,26 +81,38 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Area2D/CollisionShape2D:disabled")
+tracks/3/path = NodePath("HealthBar:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0, 0.1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [false, true]
+"values": [true, false]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("HealthBar:visible")
+tracks/4/path = NodePath("Area2D:monitorable")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.1),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true, false]
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Area2D/CollisionShape2D:disabled")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_di6et"]
@@ -158,8 +170,8 @@ collision_layer = 2
 collision_mask = 12
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-position = Vector2(-1, -2.5)
-shape = SubResource("RectangleShape2D_r1njm")
+position = Vector2(0.75, -5)
+shape = SubResource("RectangleShape2D_m3wah")
 
 [node name="Death" type="GPUParticles2D" parent="."]
 position = Vector2(0, -12)

@@ -1,0 +1,99 @@
+[gd_scene load_steps=5 format=3 uid="uid://bghbacuh4trow"]
+
+[ext_resource type="Texture2D" uid="uid://bmdldx2o22sqx" path="res://graphics/Actor/Characters/DarkNinja/Faceset.png" id="1_aq5qo"]
+[ext_resource type="Script" path="res://scenes/towers/tower_button.cs" id="2_fdqu3"]
+[ext_resource type="FontFile" uid="uid://blyext8kwg7dk" path="res://graphics/HUD/Font/NormalFont.ttf" id="3_1np0g"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b3hhf"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+anti_aliasing = false
+
+[node name="Button" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 320.0
+offset_bottom = 199.0
+pivot_offset = Vector2(325, 324)
+script = ExtResource("2_fdqu3")
+TargetTowerScenePath = "res://scenes/towers/tower.tscn"
+MoneyCost = 5
+
+[node name="HoverRect" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(0, 220)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.044
+anchor_top = -0.037
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.08
+offset_top = 2.363
+offset_right = -13.0
+offset_bottom = 26.0
+color = Color(1, 1, 1, 0)
+
+[node name="Control" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="GridContainer" type="GridContainer" parent="Control"]
+layout_mode = 2
+offset_right = 349.0
+offset_bottom = 226.0
+theme_override_constants/v_separation = 15
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/GridContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="TextureButton" type="TextureButton" parent="Control/GridContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+texture_normal = ExtResource("1_aq5qo")
+stretch_mode = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/GridContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="Control/GridContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_1np0g")
+theme_override_font_sizes/font_size = 25
+text = "Dark     Ninja"
+
+[node name="Label" type="Label" parent="Control/GridContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Price: $5.00"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/GridContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Desc" type="Label" parent="Control/GridContainer/VBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 15
+text = "Ranged type unit. After years of training, the dark ninjas mastered the power of the shuriken, now they can`t miss a single throw."
+horizontal_alignment = 3
+autowrap_mode = 2
+justification_flags = 234
+
+[node name="HSeparator" type="HSeparator" parent="Control/GridContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxFlat_b3hhf")
+
+[connection signal="mouse_entered" from="." to="." method="OnMouseEntered"]
+[connection signal="mouse_exited" from="." to="." method="OnMouseExited"]
+[connection signal="mouse_entered" from="Control" to="." method="OnMouseEntered"]
+[connection signal="mouse_exited" from="Control" to="." method="OnMouseExited"]

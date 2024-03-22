@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://c8jn8hisrg81w"]
+
+[ext_resource type="PackedScene" uid="uid://dkm8bsbkwpx0" path="res://scenes/enemies/mob.tscn" id="1_3jb6s"]
+[ext_resource type="Texture2D" uid="uid://bt46kfuop7g2l" path="res://graphics/Actor/Monsters/Larva/Larva.png" id="2_rd4us"]
+
+[node name="larva" instance=ExtResource("1_3jb6s")]
+Speed = 30.0
+Damage = 10
+MoneyDrop = 10
+resistence = 2.5
+
+[node name="Sprite2D" parent="." index="0"]
+texture = ExtResource("2_rd4us")

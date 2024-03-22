@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://dupxhocwimf7b"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.227451, 0.156863, 0.0705882, 1)
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 0
+offset_right = 1148.0
+offset_bottom = 651.0
+
+[node name="Control" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/Control"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 50
+text = "Save The Dojo"
+
+[node name="Label2" type="Label" parent="ScrollContainer/Control"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 50
+text = "Save The Dojo"
+
+[node name="Label3" type="Label" parent="ScrollContainer/Control"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 50
+text = "Save The Dojo"
+
+[node name="Label4" type="Label" parent="ScrollContainer/Control"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 50
+text = "Save The Dojo"
+
+[node name="Label5" type="Label" parent="ScrollContainer/Control"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 50
+text = "Save The Dojo"
+
+[node name="Label6" type="Label" parent="ScrollContainer/Control"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 50
+text = "Save The Dojo"
+
+[node name="Label7" type="Label" parent="ScrollContainer/Control"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 50
+text = "Save The Dojo"
+
+[node name="Label8" type="Label" parent="ScrollContainer/Control"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 50
+text = "Save The Dojo"
+
+[node name="Label9" type="Label" parent="ScrollContainer/Control"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 50
+text = "Save The Dojo"
+
+[node name="Label10" type="Label" parent="ScrollContainer/Control"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 50
+text = "Save The Dojo"
+
+[node name="Label11" type="Label" parent="ScrollContainer/Control"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 50
+text = "Dont save the dojo"

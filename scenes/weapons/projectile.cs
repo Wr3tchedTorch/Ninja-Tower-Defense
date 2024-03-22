@@ -30,7 +30,6 @@ public partial class projectile : Area2D
         if (_destroyed) return;
 
         area.GetParent<Mob>().Hit(Damage);
-
         GetNode<AnimationPlayer>("AnimationPlayer").Play("break");
         _destroyed = true;
     }    

@@ -1,12 +1,15 @@
-[gd_scene load_steps=24 format=3 uid="uid://bap6hgbt0khsj"]
+[gd_scene load_steps=29 format=3 uid="uid://bap6hgbt0khsj"]
 
 [ext_resource type="Script" path="res://scenes/level.cs" id="1_el0fd"]
-[ext_resource type="PackedScene" uid="uid://bmptufhcn41v7" path="res://scenes/towers/tower.tscn" id="1_mjqos"]
 [ext_resource type="Texture2D" uid="uid://cvhhg4ii2qfl2" path="res://graphics/Backgrounds/Tilesets/TilesetHouse.png" id="1_vi1gn"]
 [ext_resource type="Texture2D" uid="uid://c65hhml5d5y6m" path="res://graphics/Backgrounds/Tilesets/TilesetField.png" id="2_cwt58"]
 [ext_resource type="Texture2D" uid="uid://bbuirq0iu65ku" path="res://graphics/Backgrounds/Tilesets/TilesetFloor.png" id="3_hwoh2"]
 [ext_resource type="Texture2D" uid="uid://wpftrfl73hkq" path="res://graphics/Backgrounds/Tilesets/TilesetFloorDetail.png" id="4_yvgmj"]
 [ext_resource type="PackedScene" uid="uid://bmegjugrcjj5q" path="res://scenes/miscellaneous/light.tscn" id="7_qh421"]
+[ext_resource type="FontFile" uid="uid://blyext8kwg7dk" path="res://graphics/HUD/Font/NormalFont.ttf" id="8_mob35"]
+[ext_resource type="Texture2D" uid="uid://dth7o4rbiqfh6" path="res://graphics/HUD/Dialog/DialogueBoxSimple.png" id="8_uhpwv"]
+[ext_resource type="Texture2D" uid="uid://ci1lp5jueda1b" path="res://graphics/HUD/Arrow.png" id="9_dp5he"]
+[ext_resource type="PackedScene" uid="uid://bghbacuh4trow" path="res://scenes/towers/tower_button.tscn" id="9_tpax2"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_g0sfd"]
 
@@ -1082,16 +1085,12 @@ _data = {
 }
 point_count = 4
 
-[sub_resource type="Environment" id="Environment_tnphn"]
-background_mode = 3
-tonemap_mode = 2
-tonemap_exposure = 0.83
-glow_levels/3 = 0.0
-glow_levels/5 = 0.0
-glow_intensity = 5.43
-glow_strength = 1.22
-glow_blend_mode = 1
-glow_hdr_threshold = 0.45
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_craaj"]
+size = Vector2(94, 52)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_erl2c"]
+radius = 9.0
+height = 48.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dui7m"]
 bg_color = Color(0.145098, 0.0117647, 0.027451, 1)
@@ -1117,6 +1116,17 @@ corner_radius_top_right = 50
 corner_radius_bottom_right = 50
 corner_radius_bottom_left = 50
 
+[sub_resource type="Environment" id="Environment_tnphn"]
+background_mode = 3
+tonemap_mode = 2
+tonemap_exposure = 0.83
+glow_levels/3 = 0.0
+glow_levels/5 = 0.0
+glow_intensity = 5.43
+glow_strength = 1.22
+glow_blend_mode = 1
+glow_hdr_threshold = 0.45
+
 [node name="Level" type="Node2D"]
 process_mode = 3
 y_sort_enabled = true
@@ -1139,55 +1149,70 @@ layer_2/tile_data = PackedInt32Array(655387, 262144, 4, 1179649, 1245184, 9, 117
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(242, 137)
-zoom = Vector2(2.375, 2.375)
+zoom = Vector2(2.2, 2.2)
 
-[node name="FinishLine" type="Area2D" parent="."]
+[node name="Enemies" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="FinishLine" type="Area2D" parent="Enemies"]
 position = Vector2(432, 182)
 collision_layer = 4
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="FinishLine"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemies/FinishLine"]
 shape = SubResource("RectangleShape2D_ifog4")
 
-[node name="Path2D" type="Path2D" parent="."]
+[node name="Path2D" type="Path2D" parent="Enemies"]
 y_sort_enabled = true
 curve = SubResource("Curve2D_trptl")
+
+[node name="SpawnEnemy" type="Timer" parent="Enemies"]
+wait_time = 0.5
+autostart = true
+
+[node name="NextWaveDelay" type="Timer" parent="Enemies"]
+unique_name_in_owner = true
+wait_time = 10.0
+one_shot = true
 
 [node name="Towers" type="Node2D" parent="."]
 y_sort_enabled = true
 
-[node name="Tower" parent="Towers" instance=ExtResource("1_mjqos")]
-position = Vector2(97, 167)
-
 [node name="Projectiles" type="Node2D" parent="Towers"]
 y_sort_enabled = true
 
-[node name="Light" parent="Towers" instance=ExtResource("7_qh421")]
-position = Vector2(54, -65)
+[node name="NonBuildable" type="Area2D" parent="Towers"]
+collision_layer = 16
+collision_mask = 0
 
-[node name="Light2" parent="Towers" instance=ExtResource("7_qh421")]
-position = Vector2(435, 161)
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Towers/NonBuildable"]
+polygon = PackedVector2Array(50, 1, 50, 193, 58, 206, 447, 206, 447, 192, 67, 195, 62, 190, 63, 0)
 
-[node name="Light3" parent="Towers" instance=ExtResource("7_qh421")]
-position = Vector2(35, 215)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Towers/NonBuildable"]
+position = Vector2(424, 165)
+shape = SubResource("RectangleShape2D_craaj")
 
-[node name="Light5" parent="Towers" instance=ExtResource("7_qh421")]
-position = Vector2(379, 217)
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Towers/NonBuildable"]
+position = Vector2(8, 106)
+shape = SubResource("CapsuleShape2D_erl2c")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_tnphn")
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Towers/NonBuildable"]
+position = Vector2(104, 106)
+shape = SubResource("CapsuleShape2D_erl2c")
 
-[node name="SpawnEnemy" type="Timer" parent="."]
-wait_time = 0.5
-autostart = true
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Towers/NonBuildable"]
+position = Vector2(88, 56)
+shape = SubResource("CapsuleShape2D_erl2c")
 
-[node name="DirectionalLight2D" type="DirectionalLight2D" parent="."]
-energy = 0.2
-blend_mode = 1
+[node name="CollisionShape2D5" type="CollisionShape2D" parent="Towers/NonBuildable"]
+position = Vector2(24, 55)
+shape = SubResource("CapsuleShape2D_erl2c")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="Interface" type="Node2D" parent="."]
 
-[node name="HealthBar" type="ProgressBar" parent="CanvasLayer"]
+[node name="GameHUD" type="CanvasLayer" parent="Interface"]
+
+[node name="HealthBar" type="ProgressBar" parent="Interface/GameHUD"]
 unique_name_in_owner = true
 anchors_preset = 12
 anchor_top = 1.0
@@ -1202,9 +1227,40 @@ theme_override_styles/background = SubResource("StyleBoxFlat_dui7m")
 theme_override_styles/fill = SubResource("StyleBoxFlat_lih8r")
 value = 100.0
 
-[node name="GameOver" type="CanvasLayer" parent="."]
+[node name="MoneyLabel" type="Label" parent="Interface/GameHUD"]
+unique_name_in_owner = true
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 23.0
+grow_horizontal = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 15
+theme_override_fonts/font = ExtResource("8_mob35")
+theme_override_font_sizes/font_size = 50
+text = "Money: 5"
 
-[node name="RedBackground" type="ColorRect" parent="GameOver"]
+[node name="WaveLabel" type="Label" parent="Interface/GameHUD"]
+unique_name_in_owner = true
+anchors_preset = -1
+anchor_left = 0.045
+anchor_top = 0.841
+anchor_right = 0.045
+anchor_bottom = 0.886
+offset_top = -23.0
+offset_right = 40.0
+grow_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 15
+theme_override_fonts/font = ExtResource("8_mob35")
+theme_override_font_sizes/font_size = 40
+text = "Wave:1"
+
+[node name="GameOver" type="CanvasLayer" parent="Interface"]
+
+[node name="RedBackground" type="ColorRect" parent="Interface/GameOver"]
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0)
 anchors_preset = 15
@@ -1214,7 +1270,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.196078, 0, 0, 1)
 
-[node name="GameoverLabel1" type="Label" parent="GameOver"]
+[node name="GameoverLabel1" type="Label" parent="Interface/GameOver"]
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0)
 anchors_preset = 8
@@ -1228,10 +1284,11 @@ offset_right = 126.0
 offset_bottom = -53.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_fonts/font = ExtResource("8_mob35")
 theme_override_font_sizes/font_size = 40
 text = "YOUR SENSEI"
 
-[node name="GameoverLabel2" type="Label" parent="GameOver"]
+[node name="GameoverLabel2" type="Label" parent="Interface/GameOver"]
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0)
 anchors_preset = 8
@@ -1245,10 +1302,11 @@ offset_right = 292.0
 offset_bottom = 55.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_fonts/font = ExtResource("8_mob35")
 theme_override_font_sizes/font_size = 80
 text = "WAS KILLED..."
 
-[node name="GameoverLabel3" type="Label" parent="GameOver"]
+[node name="GameoverLabel3" type="Label" parent="Interface/GameOver"]
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0)
 anchors_preset = 8
@@ -1256,14 +1314,114 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -145.0
-offset_top = 61.0
-offset_right = 380.0
-offset_bottom = 171.0
+offset_left = -190.0
+offset_top = 73.0
+offset_right = 190.0
+offset_bottom = 133.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_fonts/font = ExtResource("8_mob35")
 theme_override_font_sizes/font_size = 30
-text = "Press R to play again"
+text = "Press    R    to    play    again"
 
-[connection signal="area_entered" from="FinishLine" to="." method="OnFinishLineAreaEntered"]
-[connection signal="timeout" from="SpawnEnemy" to="." method="OnSpawnEnemyTimeout"]
+[node name="Store" type="CanvasLayer" parent="Interface"]
+
+[node name="ControlMenu" type="Control" parent="Interface/Store"]
+unique_name_in_owner = true
+layout_mode = 3
+anchor_left = 1.0
+anchor_top = 0.1
+anchor_right = 2.0
+anchor_bottom = 1.0
+offset_right = -1152.0
+offset_bottom = -648.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 0
+
+[node name="StoreMenu" type="NinePatchRect" parent="Interface/Store/ControlMenu"]
+layout_mode = 1
+offset_right = 384.0
+offset_bottom = 473.0
+texture = ExtResource("8_uhpwv")
+region_rect = Rect2(0, 0, 316.5, 60)
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 10
+patch_margin_bottom = 10
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Interface/Store/ControlMenu/StoreMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 19.0
+offset_top = 30.0
+offset_right = -20.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Interface/Store/ControlMenu/StoreMenu/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 140
+
+[node name="Button" parent="Interface/Store/ControlMenu/StoreMenu/ScrollContainer/VBoxContainer" instance=ExtResource("9_tpax2")]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+
+[node name="Button5" parent="Interface/Store/ControlMenu/StoreMenu/ScrollContainer/VBoxContainer" instance=ExtResource("9_tpax2")]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+
+[node name="Button2" parent="Interface/Store/ControlMenu/StoreMenu/ScrollContainer/VBoxContainer" instance=ExtResource("9_tpax2")]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+
+[node name="Button3" parent="Interface/Store/ControlMenu/StoreMenu/ScrollContainer/VBoxContainer" instance=ExtResource("9_tpax2")]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+
+[node name="Button4" parent="Interface/Store/ControlMenu/StoreMenu/ScrollContainer/VBoxContainer" instance=ExtResource("9_tpax2")]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+
+[node name="StoreButtonMenu" type="TextureButton" parent="Interface/Store/ControlMenu"]
+layout_mode = 0
+offset_right = 67.0
+offset_bottom = 70.0
+rotation = 1.5708
+texture_normal = ExtResource("9_dp5he")
+texture_pressed = ExtResource("9_dp5he")
+texture_hover = ExtResource("9_dp5he")
+texture_focused = ExtResource("9_dp5he")
+stretch_mode = 4
+
+[node name="Objects" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Light" parent="Objects" instance=ExtResource("7_qh421")]
+position = Vector2(54, -65)
+
+[node name="Light2" parent="Objects" instance=ExtResource("7_qh421")]
+position = Vector2(435, 161)
+
+[node name="Light3" parent="Objects" instance=ExtResource("7_qh421")]
+position = Vector2(35, 215)
+
+[node name="Light5" parent="Objects" instance=ExtResource("7_qh421")]
+position = Vector2(379, 217)
+
+[node name="DirectionalLight2D" type="DirectionalLight2D" parent="."]
+energy = 0.2
+blend_mode = 1
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_tnphn")
+
+[connection signal="area_entered" from="Enemies/FinishLine" to="." method="OnFinishLineAreaEntered"]
+[connection signal="timeout" from="Enemies/SpawnEnemy" to="." method="OnSpawnEnemyTimeout"]
+[connection signal="timeout" from="Enemies/NextWaveDelay" to="." method="OnNextWaveTimerTimeout"]
+[connection signal="pressed" from="Interface/Store/ControlMenu/StoreButtonMenu" to="." method="OnButtonMenuPressed"]

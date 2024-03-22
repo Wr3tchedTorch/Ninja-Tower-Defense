@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://b24t21abd3dei"]
+
+[ext_resource type="PackedScene" uid="uid://dkm8bsbkwpx0" path="res://scenes/enemies/mob.tscn" id="1_f25m4"]
+[ext_resource type="Texture2D" uid="uid://bdvbpgnhw8xfr" path="res://graphics/Actor/Monsters/Spirit2/SpriteSheet.png" id="2_10x80"]
+
+[node name="Fire Spirit" instance=ExtResource("1_f25m4")]
+Speed = 120.0
+Damage = 5
+MoneyDrop = 3
+resistence = 0.7
+
+[node name="Sprite2D" parent="." index="0"]
+position = Vector2(-1, -6)
+texture = ExtResource("2_10x80")
