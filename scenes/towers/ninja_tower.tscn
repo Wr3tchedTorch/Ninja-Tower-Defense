@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://cbeluvld8bkua"]
+
+[ext_resource type="PackedScene" uid="uid://bmptufhcn41v7" path="res://scenes/towers/tower.tscn" id="1_ych0j"]
+[ext_resource type="Script" path="res://scenes/towers/ranged_tower.cs" id="2_43gn6"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_s82nm"]
+radius = 88.2043
+
+[node name="NinjaTower" instance=ExtResource("1_ych0j")]
+script = ExtResource("2_43gn6")
+TargetProjectilePath = "res://scenes/weapons/shuriken.tscn"
+AttackSpeed = 6.0
+
+[node name="AttackRange" type="Area2D" parent="." index="5"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="AttackCircle" type="CollisionShape2D" parent="AttackRange" index="0"]
+unique_name_in_owner = true
+position = Vector2(0, -4)
+shape = SubResource("CircleShape2D_s82nm")

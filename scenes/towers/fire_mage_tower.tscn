@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://4yhorw7yh77m"]
+
+[ext_resource type="PackedScene" uid="uid://bmptufhcn41v7" path="res://scenes/towers/tower.tscn" id="1_ms40u"]
+[ext_resource type="Script" path="res://scenes/towers/fire_mage_tower.cs" id="2_wrqon"]
+[ext_resource type="Texture2D" uid="uid://s55ao7iany68" path="res://graphics/Actor/Characters/BlackNinjaMage/SpriteSheet.png" id="2_xd6b1"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_t3jx5"]
+radius = 57.0088
+
+[node name="FireMageTower" instance=ExtResource("1_ms40u")]
+script = ExtResource("2_wrqon")
+TargetProjectilePath = "res://scenes/weapons/fireball.tscn"
+AttackSpeed = 1.0
+
+[node name="Sprite2D" parent="Sprite" index="0"]
+texture = ExtResource("2_xd6b1")
+
+[node name="Marker2D" parent="." index="2"]
+position = Vector2(0, -34)
+
+[node name="AttackRange" type="Area2D" parent="." index="6"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="AttackCircle" type="CollisionShape2D" parent="AttackRange" index="0"]
+unique_name_in_owner = true
+position = Vector2(0, -4)
+shape = SubResource("CircleShape2D_t3jx5")

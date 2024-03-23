@@ -1,8 +1,7 @@
-[gd_scene load_steps=14 format=3 uid="uid://oioqtavw4x8l"]
+[gd_scene load_steps=7 format=3 uid="uid://oioqtavw4x8l"]
 
 [ext_resource type="Script" path="res://scenes/weapons/projectile.cs" id="1_6yavc"]
 [ext_resource type="Texture2D" uid="uid://d0m1xjdgls3mo" path="res://graphics/FX/Projectile/Shuriken.png" id="1_7lpyy"]
-[ext_resource type="PackedScene" uid="uid://j1cb8b11m48u" path="res://scenes/weapons/trail.tscn" id="3_ywa17"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_gt4me"]
 radius = 8.0
@@ -29,96 +28,6 @@ animations = [{
 "speed": 8.0
 }]
 
-[sub_resource type="Animation" id="Animation_7h2fu"]
-resource_name = "break"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("CollisionShape2D:disabled")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("AnimatedSprite2D:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("GPUParticles2D:emitting")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0.1),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/3/type = "method"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath(".")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(1),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"queue_free"
-}]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath(".:monitoring")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-
-[sub_resource type="Animation" id="Animation_d6yil"]
-resource_name = "none"
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_ktg1b"]
-_data = {
-"break": SubResource("Animation_7h2fu"),
-"none": SubResource("Animation_d6yil")
-}
-
-[sub_resource type="Gradient" id="Gradient_40a2n"]
-colors = PackedColorArray(0.439049, 0.439049, 0.439049, 1, 0.356863, 0.356863, 0.356863, 0.392157)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_lgm6j"]
-gradient = SubResource("Gradient_40a2n")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_o2mlm"]
-particle_flag_disable_z = true
-spread = 180.0
-initial_velocity_min = 20.0
-initial_velocity_max = 20.0
-gravity = Vector3(0, 0, 0)
-scale_max = 2.0
-color = Color(0.423529, 0.423529, 0.423529, 1)
-color_ramp = SubResource("GradientTexture1D_lgm6j")
-
 [node name="Projectile" type="Area2D"]
 collision_layer = 8
 collision_mask = 2
@@ -132,23 +41,5 @@ shape = SubResource("CircleShape2D_gt4me")
 sprite_frames = SubResource("SpriteFrames_82116")
 animation = &"throwed"
 frame_progress = 0.692117
-
-[node name="Trail" parent="." instance=ExtResource("3_ywa17")]
-show_behind_parent = true
-top_level = true
-width = 5.0
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_ktg1b")
-}
-
-[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
-emitting = false
-amount = 20
-process_material = SubResource("ParticleProcessMaterial_o2mlm")
-lifetime = 0.5
-one_shot = true
-explosiveness = 1.0
 
 [connection signal="area_entered" from="." to="." method="OnAreaEntered"]

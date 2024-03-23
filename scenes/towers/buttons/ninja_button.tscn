@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://h6vmdcotiqo1"]
+
+[ext_resource type="PackedScene" uid="uid://bghbacuh4trow" path="res://scenes/towers/tower_button.tscn" id="1_cej1n"]
+[ext_resource type="Texture2D" uid="uid://bmdldx2o22sqx" path="res://graphics/Actor/Characters/DarkNinja/Faceset.png" id="2_a6h67"]
+
+[node name="NinjaButton" instance=ExtResource("1_cej1n")]
+TargetTowerScenePath = "res://scenes/towers/ninja_tower.tscn"
+MoneyCost = 5
+
+[node name="TextureButton" parent="Control/GridContainer/HBoxContainer" index="0"]
+texture_normal = ExtResource("2_a6h67")
+
+[node name="Title" parent="Control/GridContainer/HBoxContainer/VBoxContainer" index="0"]
+text = "Dark     Ninja"
+
+[node name="Label" parent="Control/GridContainer/HBoxContainer/VBoxContainer" index="1"]
+text = "Price: $5.00"

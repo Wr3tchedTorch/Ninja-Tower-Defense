@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://bghbacuh4trow"]
 
-[ext_resource type="Texture2D" uid="uid://bmdldx2o22sqx" path="res://graphics/Actor/Characters/DarkNinja/Faceset.png" id="1_aq5qo"]
+[ext_resource type="Texture2D" uid="uid://bf1a81qegm3kd" path="res://graphics/Actor/Characters/BlackNinjaMage/Faceset.png" id="2_dvbgn"]
 [ext_resource type="Script" path="res://scenes/towers/tower_button.cs" id="2_fdqu3"]
 [ext_resource type="FontFile" uid="uid://blyext8kwg7dk" path="res://graphics/HUD/Font/NormalFont.ttf" id="3_1np0g"]
 
@@ -16,12 +16,12 @@ anti_aliasing = false
 [node name="Button" type="Control"]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 320.0
-offset_bottom = 199.0
+offset_right = 337.0
+offset_bottom = 237.0
 pivot_offset = Vector2(325, 324)
 script = ExtResource("2_fdqu3")
-TargetTowerScenePath = "res://scenes/towers/tower.tscn"
-MoneyCost = 5
+TargetTowerScenePath = "res://scenes/towers/fire_mage_tower.tscn"
+MoneyCost = 15
 
 [node name="HoverRect" type="ColorRect" parent="."]
 custom_minimum_size = Vector2(0, 220)
@@ -31,16 +31,16 @@ anchor_left = -0.044
 anchor_top = -0.037
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 10.08
-offset_top = 2.363
-offset_right = -13.0
-offset_bottom = 26.0
+offset_left = 9.828
+offset_top = 2.769
+offset_right = -3.0
+offset_bottom = 17.0
 color = Color(1, 1, 1, 0)
 
 [node name="Control" type="Control" parent="."]
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 328.0
+offset_bottom = 245.0
 
 [node name="GridContainer" type="GridContainer" parent="Control"]
 layout_mode = 2
@@ -55,7 +55,7 @@ theme_override_constants/separation = 20
 [node name="TextureButton" type="TextureButton" parent="Control/GridContainer/HBoxContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-texture_normal = ExtResource("1_aq5qo")
+texture_normal = ExtResource("2_dvbgn")
 stretch_mode = 4
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/GridContainer/HBoxContainer"]
@@ -67,12 +67,12 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_1np0g")
 theme_override_font_sizes/font_size = 25
-text = "Dark     Ninja"
+text = "Dark     Mage"
 
 [node name="Label" type="Label" parent="Control/GridContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Price: $5.00"
+text = "Price: $15.00"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/GridContainer"]
 custom_minimum_size = Vector2(300, 0)

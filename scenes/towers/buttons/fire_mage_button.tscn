@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://bry7mrwy6mrdb"]
+
+[ext_resource type="PackedScene" uid="uid://bghbacuh4trow" path="res://scenes/towers/tower_button.tscn" id="1_gyigy"]
+
+[node name="FireMageButton" instance=ExtResource("1_gyigy")]
+MoneyCost = 10
+
+[node name="Title" parent="Control/GridContainer/HBoxContainer/VBoxContainer" index="0"]
+text = "Fire     Mage"
+
+[node name="Label" parent="Control/GridContainer/HBoxContainer/VBoxContainer" index="1"]
+text = "Price: $10.00"

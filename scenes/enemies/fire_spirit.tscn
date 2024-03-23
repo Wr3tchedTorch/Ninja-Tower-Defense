@@ -5,7 +5,7 @@
 
 [node name="Fire Spirit" instance=ExtResource("1_f25m4")]
 Speed = 160.0
-resistence = 0.7
+resistence = 0.5
 
 [node name="Sprite2D" parent="." index="0"]
 position = Vector2(-1, -6)

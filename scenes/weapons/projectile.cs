@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 public partial class projectile : Area2D
 {
@@ -8,29 +7,34 @@ public partial class projectile : Area2D
     public int Speed = 200;
     [Export]
     public int Damage = 50;
-    private bool _destroyed = false;
+    public bool Destroyed = false;
+    public bool HasBeenThrowed = true;
 
     public override void _PhysicsProcess(double delta)
     {
+        if (!HasBeenThrowed) return;
+
         if (!IsInstanceValid(Target) || Target.GetParent<Mob>().Health <= 0) 
         {
             GetNode<AnimationPlayer>("AnimationPlayer").Play("break");
             return;
         }
 
-        if (!_destroyed)
+        if (!Destroyed)
         {
             LookAt(Target.GlobalPosition);
             GlobalPosition = GlobalPosition.MoveToward(Target.GlobalPosition, Speed * (float)delta);
         }
     }
 
-    public void OnAreaEntered(Area2D area)
-    {        
-        if (_destroyed) return;
+    public virtual void OnAreaEntered(Area2D area)
+    {
+        if (!HasBeenThrowed) return;
+
+        if (Destroyed) return;
 
         area.GetParent<Mob>().Hit(Damage);
         GetNode<AnimationPlayer>("AnimationPlayer").Play("break");
-        _destroyed = true;
-    }    
+        Destroyed = true;
+    }
 }

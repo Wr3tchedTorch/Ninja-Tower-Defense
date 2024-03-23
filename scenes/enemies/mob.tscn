@@ -160,7 +160,6 @@ rotates = false
 script = ExtResource("1_umuak")
 Speed = 80.0
 Damage = 5
-resistence = 2.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(0, -8)

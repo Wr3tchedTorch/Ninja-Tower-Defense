@@ -9,14 +9,22 @@ public partial class level : Node2D
     private bool _closedMenuAfterBuying = false;
     private int enemiesLeft = 0;
     public int EnemiesAlive = 0;
-    private int[] _waves = { 2, 2 };
+    private int[] _waves = { 10, 20, 30, 40, 50 };
     private bool _waveStarted = false;
     private int _currentWaveIndex = 0;
     private bool _levelFinished = false;
     private bool _levelFinishedScreenFaded = false;
 
+    private void transitionTweenFinished() => GetNode<ColorRect>("%TransitionRect").Visible = false;
+
     public override void _Ready()
     {
+        GetNode<ColorRect>("%TransitionRect").Visible = true;
+        Tween transitionTween = CreateTween();
+        transitionTween.TweenProperty(GetNode<ColorRect>("%TransitionRect"), "color", new Color(Colors.Black, 0f), 1);
+        Callable transitionTweenFinished = new Callable(this, "transitionTweenFinished");
+        transitionTween.Connect("finished", transitionTweenFinished);
+
         Global.Money = 10;
 
         GetNode<ColorRect>("%RedBackground").Visible = false;
@@ -25,26 +33,12 @@ public partial class level : Node2D
         GetNode<Label>("%WaveLabel").Text = "Wave: " + (_currentWaveIndex + 1);
         _waveStarted = false;
     }
+
     public override void _Process(double delta)
     {
         if (_levelFinishedScreenFaded) return;
 
-        if (_currentWaveIndex >= _waves.Length && EnemiesAlive <= 0)
-        {
-            _levelFinished = true;
-            _levelFinishedScreenFaded = true;
-            LevelFinished();
-            return;
-        }
-        GD.Print("time left:" + GetNode<Timer>("%NextWaveDelay").TimeLeft);
-        if (_currentWaveIndex < _waves.Length && EnemiesAlive <= 0 && GetNode<Timer>("%NextWaveDelay").TimeLeft <= 0 && !_waveStarted)
-        {
-            _currentWaveIndex++;            
-            if (_currentWaveIndex < _waves.Length) {
-                GetNode<Timer>("%NextWaveDelay").Start();
-                StartNextWave();
-            }
-        }
+        HandleWaveState();
 
         if (Global.IsBuilding && !_closedMenuAfterBuying)
         {
@@ -52,9 +46,9 @@ public partial class level : Node2D
             OnButtonMenuPressed();
         }
 
-        if (!Global.IsBuilding) _closedMenuAfterBuying = false;
-
         GetNode<Label>("%MoneyLabel").Text = "Money: " + Global.Money;
+
+        if (!Global.IsBuilding) _closedMenuAfterBuying = false;
 
         if (Input.IsActionPressed("reset-game")) GetTree().ReloadCurrentScene();
 
@@ -62,14 +56,55 @@ public partial class level : Node2D
         Gameover();
     }
 
-    private void ShowNewScreen(string backgroundPath, string firstLabel, string secondLabel, string tweenFinishFunctionName)
+    public void TakeDamage(int damage) {
+        if (_health <= 0) return;
+        _health -= damage;
+        if (GetNode<camera>("%Camera2D").ShakeStrength < 1) GetNode<camera>("%Camera2D").ApplyShake(5);
+        
+        GetNode<ColorRect>("%RedBackground").Visible = true;
+        Tween redBgTween = GetTree().CreateTween();        
+        redBgTween.TweenProperty(GetNode<ColorRect>("%RedBackground"), "modulate", new Color(Colors.White, .1f), 0.1);
+        redBgTween.TweenProperty(GetNode<ColorRect>("%RedBackground"), "modulate", new Color(Colors.White, 0f), 0.2);       
+
+        Callable callable = new Callable(this, "redBgTweenFinished");
+        redBgTween.Connect("finished", callable);
+    }
+
+    private void redBgTweenFinished() {
+        if (_health > 0) GetNode<ColorRect>("%RedBackground").Visible = false;
+    }
+
+    private void HandleWaveState()
+    {
+        if (EnemiesAlive > 0) return;
+
+        if (_currentWaveIndex >= _waves.Length)
+        {
+            _levelFinished = true;
+            _levelFinishedScreenFaded = true;
+            LevelFinished();
+            return;
+        }
+
+        if (GetNode<Timer>("%NextWaveDelay").TimeLeft <= 0 && !_waveStarted)
+        {
+            _currentWaveIndex++;
+            if (_currentWaveIndex >= _waves.Length) return;
+
+            Global.Money += (_currentWaveIndex + 1) * 2 + 10;
+            GetNode<Timer>("%NextWaveDelay").Start();
+            StartNextWave();
+        }
+    }
+
+    private void ShowNewScreen(string backgroundPath, string firstLabel, string secondLabel, string tweenFinishFunctionName, Color textColor)
     {
         Tween tweenLevelFinishedScreen = GetTree().CreateTween();
 
         GetNode<ColorRect>(backgroundPath).Visible = true;
         tweenLevelFinishedScreen.TweenProperty(GetNode<ColorRect>(backgroundPath), "modulate", new Color(Colors.White, 1f), 1);
-        tweenLevelFinishedScreen.TweenProperty(GetNode<Label>(firstLabel), "modulate", new Color(Colors.Green, 1), 1);
-        tweenLevelFinishedScreen.TweenProperty(GetNode<Label>(secondLabel), "modulate", new Color(Colors.Green, 1), 1);
+        tweenLevelFinishedScreen.TweenProperty(GetNode<Label>(firstLabel), "modulate", new Color(textColor, 1), 1);
+        tweenLevelFinishedScreen.TweenProperty(GetNode<Label>(secondLabel), "modulate", new Color(textColor, 1), 1);
 
         Callable callable = new Callable(this, tweenFinishFunctionName);
         tweenLevelFinishedScreen.Connect("finished", callable);
@@ -77,13 +112,13 @@ public partial class level : Node2D
 
     private void LevelFinished()
     {
-        ShowNewScreen("%BlueBackground", "%LevelFinishedLabel1", "%LevelFinishedLabel2", "OnLevelFinishedTweenFinished");
+        ShowNewScreen("%BlueBackground", "%LevelFinishedLabel1", "%LevelFinishedLabel2", "OnLevelFinishedTweenFinished", Colors.Green);
         _levelFinishedScreenFaded = true;
     }
 
     private void Gameover()
     {
-        ShowNewScreen("%RedBackground", "%GameoverLabel1", "%GameoverLabel2", "OnGameOverTweenFinished");
+        ShowNewScreen("%RedBackground", "%GameoverLabel1", "%GameoverLabel2", "OnGameOverTweenFinished", Colors.Red);
         _gameoverScreenFaded = true;
     }
 
@@ -151,14 +186,13 @@ public partial class level : Node2D
     {
         GD.Print("Next wave");
         _waveStarted = true;
-        if (_currentWaveIndex != 0) Global.Money += (_currentWaveIndex + 1) * 2 + 10;
     }
 
     public void OnFinishLineAreaEntered(Area2D area)
     {
         if (area.GetParent() is Mob mob)
         {
-            _health -= mob.Damage;
+            TakeDamage(mob.Damage);
             Tween tweenHealth = CreateTween();
             tweenHealth.TweenProperty(GetNode<ProgressBar>("%HealthBar"), "value", _health, .2f);
         }

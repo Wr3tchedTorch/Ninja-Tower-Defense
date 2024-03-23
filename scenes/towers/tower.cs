@@ -2,13 +2,24 @@ using Godot;
 
 public partial class tower : Area2D
 {
-    Area2D currentEnemy;
-    private bool _canAttack = true;
+    public Area2D CurrentEnemy;
+    public bool CanAttack = true;
     private bool _canBuild = true;
-    private bool _isBuilt = false;
+    public bool IsBuilt = false;
+    [Export]
+    public string TargetProjectilePath;
+    [Export]
+    public double AttackSpeed;
 
     public override void _Ready()
     {
+        GD.Print("Main class script ready");
+
+        GetNode<Timer>("AttackDelay").WaitTime = 3/AttackSpeed;
+
+        GetNode<Sprite2D>("%RangeDraw").GlobalPosition = GetGlobalMousePosition();
+        GetNode<Sprite2D>("%RangeDraw").Visible = true;
+
         SetRangeSpriteRadius();
         Global.IsBuilding = true;
 
@@ -19,9 +30,11 @@ public partial class tower : Area2D
 
     public override void _Process(double delta)
     {
+        GetNode<Sprite2D>("%RangeDraw").GlobalPosition = GlobalPosition;
+
         if (GetNode<AnimationPlayer>("AnimationPlayer").IsPlaying()) return;
 
-        if (!_isBuilt)
+        if (!IsBuilt)
         {
             var collidingAreas = GetOverlappingAreas();
             _canBuild = collidingAreas.Count > 0 ? false : true;
@@ -29,23 +42,22 @@ public partial class tower : Area2D
             BuildingTower();
             return;
         }
-
-        HandleTowerRangedAttack();
+        
         HandleMouseHovering();
     }
 
     private void BuildingTower()
     {
-        GetNode<Sprite2D>("RangeDraw").Visible = true;
+        GetNode<Sprite2D>("%RangeDraw").Visible = true;
         GlobalPosition = GetGlobalMousePosition();
 
-        GetNode<Sprite2D>("RangeDraw").Modulate = new Color(Colors.Blue, .3f);
-        if (!_canBuild) GetNode<Sprite2D>("RangeDraw").Modulate = new Color(Colors.Red, .3f);
+        GetNode<Sprite2D>("%RangeDraw").Modulate = new Color(Colors.Blue, .3f);
+        if (!_canBuild) GetNode<Sprite2D>("%RangeDraw").Modulate = new Color(Colors.Red, .3f);
 
         if (!Input.IsActionJustPressed("mb-left") || !_canBuild) return;
-        _isBuilt = true;
+        IsBuilt = true;
         Global.IsBuilding = false;
-        GetNode<Sprite2D>("RangeDraw").Visible = false;
+        GetNode<Sprite2D>("%RangeDraw").Visible = false;
         GetNode<AnimationPlayer>("AnimationPlayer").Play("spawn");
     }
 
@@ -61,35 +73,10 @@ public partial class tower : Area2D
             GetGlobalMousePosition().Y > hitBoxPos.Y - hitBoxH / 2 && GetGlobalMousePosition().Y < hitBoxPos.Y + hitBoxH / 2
             )
         {
-            GetNode<Sprite2D>("RangeDraw").Visible = true;
+            GetNode<Sprite2D>("%RangeDraw").Visible = true;
             return;
         }        
-        GetNode<Sprite2D>("RangeDraw").Visible = false;
-    }
-
-    private void HandleTowerRangedAttack()
-    {
-        Area2D range = GetNode<Area2D>("AttackRange");
-
-        if (!_canAttack) return;        
-        var enemies = range.GetOverlappingAreas();
-
-        if (enemies.Count <= 0 || !IsInstanceValid(enemies[0])) return;
-        currentEnemy = enemies[0];
-
-        PackedScene bulletScene = GD.Load<PackedScene>("res://scenes/weapons/projectile.tscn");
-        projectile newProjectile = bulletScene.Instantiate<projectile>();
-
-        GetNode<Node2D>("../Projectiles").AddChild(newProjectile);
-        newProjectile.GlobalPosition = GetNode<Marker2D>("Marker2D").GlobalPosition;
-        newProjectile.Target = currentEnemy;
-
-        Tween rotTween = CreateTween();
-        rotTween.TweenProperty(GetNode<Node2D>("Sprite"), "rotation", Mathf.DegToRad(RotationDegrees - 45), .2f);
-        rotTween.TweenProperty(GetNode<Node2D>("Sprite"), "rotation", Mathf.DegToRad(RotationDegrees), .2f);
-
-        _canAttack = false;
-        GetNode<Timer>("AttackDelay").Start();
+        GetNode<Sprite2D>("%RangeDraw").Visible = false;
     }
 
     private void SetRangeSpriteRadius()
@@ -99,8 +86,8 @@ public partial class tower : Area2D
         float newHeight = (currentRadius * 3.52f) / 140;
 
         Vector2 newScale = new Vector2(newWidth, newHeight);
-        GetNode<Sprite2D>("RangeDraw").Scale = newScale;
+        GetNode<Sprite2D>("%RangeDraw").Scale = newScale;
     }
 
-    public void OnAttackDelayTimeout() => _canAttack = true;
+    public void OnAttackDelayTimeout() => CanAttack = true;
 }
