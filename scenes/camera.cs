@@ -23,7 +23,6 @@ public partial class camera : Camera2D
             Tween camOffsetTween = GetTree().CreateTween();
             camOffsetTween.TweenProperty(GetNode<Camera2D>("%Camera2D"), "offset", new Vector2(0, 0), 0.2);
         }
-        GD.Print("cam offset: " + Offset);
     }
 
     public void ApplyShake(float RandomStrength = 6)

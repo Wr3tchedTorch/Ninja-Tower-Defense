@@ -13,8 +13,6 @@ public partial class tower : Area2D
 
     public override void _Ready()
     {
-        GD.Print("Main class script ready");
-
         GetNode<Timer>("AttackDelay").WaitTime = 3/AttackSpeed;
 
         GetNode<Sprite2D>("%RangeDraw").GlobalPosition = GetGlobalMousePosition();

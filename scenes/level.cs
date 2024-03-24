@@ -29,8 +29,9 @@ public partial class level : Node2D
 
         GetNode<ColorRect>("%RedBackground").Visible = false;
 
-        GetNode<Timer>("%NextWaveDelay").Start();
         GetNode<Label>("%WaveLabel").Text = "Wave: " + (_currentWaveIndex + 1);
+        GetNode<Timer>("%NextWaveDelay").Start();
+        StartNextWave();
         _waveStarted = false;
     }
 

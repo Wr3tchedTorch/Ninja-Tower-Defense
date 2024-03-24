@@ -28,8 +28,8 @@ public partial class fire_mage_tower : tower
         }
                 
         double newValue = 0.1;
-        newValue = Utils.Clamp(1/GetNode<Timer>("AttackDelay").TimeLeft, 0, 10);
-        newValue = Mathf.Remap(newValue, 0, 10, 0, 2);
+        newValue = Utils.Clamp(20/GetNode<Timer>("AttackDelay").TimeLeft, 0, 100);
+        newValue = Mathf.Remap(newValue, 0, 100, 0, 2);
         newProjectile.Scale = new Vector2((float)newValue, (float)newValue);
 
         var enemies = range.GetOverlappingAreas();

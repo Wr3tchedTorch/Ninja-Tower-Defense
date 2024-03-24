@@ -10,11 +10,22 @@ public partial class projectile : Area2D
     public bool Destroyed = false;
     public bool HasBeenThrowed = true;
 
+    Tween rotationTween;
+
+    public override void _Ready()
+    {
+        rotationTween = CreateTween().SetLoops();
+        rotationTween.TweenProperty(this, "rotation", Mathf.DegToRad(360), 1).AsRelative();
+
+    }
+
+    public void rotationTweenFinished() => RotationDegrees = -360;
+
     public override void _PhysicsProcess(double delta)
     {
         if (!HasBeenThrowed) return;
 
-        if (!IsInstanceValid(Target) || Target.GetParent<Mob>().Health <= 0) 
+        if (!IsInstanceValid(Target) || Target.GetParent<Mob>().Health <= 0)
         {
             GetNode<AnimationPlayer>("AnimationPlayer").Play("break");
             return;
